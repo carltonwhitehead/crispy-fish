@@ -3,11 +3,12 @@ package tech.coner.crispyfish.model
 import java.time.Duration
 
 data class Run(
-        var rawTime: Duration? = null,
-        var paxTime: Duration? = null,
-        var penaltyType: PenaltyType? = null,
-        var cones: Int? = null,
-        var timeScored: Duration? = null,
-        var timeScratchAsString: String? = null,
-        var timeScratchAsDuration: Duration? = null
+        val number: Int?,
+        val rawTime: Duration?,
+        val paxTime: Duration?,
+        val penaltyType: PenaltyType?,
+        val cones: Int?,
+        val timeScored: Duration?,
+        val timeScratchAsString: String?,
+        val timeScratchAsDuration: Duration?
 )

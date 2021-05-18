@@ -1,4 +1,4 @@
-package tech.coner.crispyfish.filetype.staging
+package tech.coner.crispyfish.model
 
 data class StagingLineRegistration(
         val number: String? = null,
@@ -6,6 +6,4 @@ data class StagingLineRegistration(
         val name: String? = null,
         val car: String? = null,
         val carColor: String? = null
-) {
-    val driverIdentityKey by lazy { "$classing:$number" }
-}
+)

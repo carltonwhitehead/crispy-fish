@@ -1,8 +1,6 @@
 package tech.coner.crispyfish.filetype.registration
 
 import tech.coner.crispyfish.filetype.registration.RegistrationColumn.*
-import tech.coner.crispyfish.filetype.staging.StagingLineException
-import tech.coner.crispyfish.filetype.staging.StagingLineRegistration
 import tech.coner.crispyfish.model.ClassDefinition
 import tech.coner.crispyfish.model.Registration
 import tech.coner.crispyfish.model.RegistrationResult
@@ -135,50 +133,6 @@ internal class RegistrationMapper(
 
     private fun String?.toBoolean(): Boolean {
         return this?.startsWith('Y') == true
-    }
-
-    fun toRegistration(
-        stagingLineRegistration: StagingLineRegistration,
-        registrations: List<Registration>,
-        categories: List<ClassDefinition>,
-        handicaps: List<ClassDefinition>
-    ): Registration {
-        if (stagingLineRegistration.classing == null) throw IllegalArgumentException()
-        if (stagingLineRegistration.number == null) throw IllegalArgumentException()
-
-        var handicapAbbreviation = handicaps.firstOrNull {
-            it.abbreviation == stagingLineRegistration.classing
-        }?.abbreviation
-
-        val category = if (handicapAbbreviation == null) {
-            val category = categories.firstOrNull {
-                stagingLineRegistration.classing.startsWith(it.abbreviation)
-            } ?: throw StagingLineException("""
-                Failed to resolve category and handicap for staging line.
-                classing: ${stagingLineRegistration.classing}
-            """.trimIndent()
-            )
-            handicapAbbreviation = stagingLineRegistration.classing.replaceFirst(category.abbreviation, "")
-            category
-        } else null
-
-        val handicap = handicaps.firstOrNull {
-            it.abbreviation == handicapAbbreviation
-        } ?: throw StagingLineException("""
-            No handicap found matching staging line.
-            classing: ${stagingLineRegistration.classing}
-        """.trimIndent()
-
-        )
-        return registrations.firstOrNull {
-            it.category == category
-                    && it.handicap == handicap
-                    && it.number == stagingLineRegistration.number
-        } ?: throw StagingLineException("""
-            No registration found matching staging line identity.
-            classing: ${stagingLineRegistration.classing}
-            number: ${stagingLineRegistration.number}
-        """.trimIndent())
     }
 
     companion object {

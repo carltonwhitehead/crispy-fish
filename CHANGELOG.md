@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.7
+
+- Query staging runs
+
 ## 0.5.6
 
 - Don't duplicate the gpg configuration

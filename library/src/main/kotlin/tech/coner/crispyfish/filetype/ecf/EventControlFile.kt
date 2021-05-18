@@ -7,10 +7,14 @@ import tech.coner.crispyfish.filetype.staging.SimpleStringStagingLineReader
 import tech.coner.crispyfish.filetype.staging.StagingFile
 import tech.coner.crispyfish.filetype.staging.StagingFileAssistant
 import tech.coner.crispyfish.filetype.staging.StagingFileLocator
+import tech.coner.crispyfish.model.ClassDefinition
 import tech.coner.crispyfish.model.EventDay
+import tech.coner.crispyfish.model.Run
+import tech.coner.crispyfish.model.StagingLineRegistration
 import tech.coner.crispyfish.query.CategoriesQuery
 import tech.coner.crispyfish.query.HandicapsQuery
 import tech.coner.crispyfish.query.RegistrationsQuery
+import tech.coner.crispyfish.query.StagingRunsQuery
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -45,9 +49,20 @@ class EventControlFile(
 
     fun queryHandicaps() = HandicapsQuery(classDefinitionFile).query()
 
-    fun queryRegistrations() = RegistrationsQuery(
+    fun queryRegistrations(
+        categories: List<ClassDefinition>? = null,
+        handicaps: List<ClassDefinition>? = null
+    ) = RegistrationsQuery(
             eventControlFile = this,
-            categories = queryCategories(),
-            handicaps = queryHandicaps()
+            categories = categories ?: queryCategories(),
+            handicaps = handicaps ?: queryHandicaps()
     ).query()
+
+    fun queryStagingRuns(
+        eventDay: EventDay = EventDay.ONE
+    ): List<Pair<StagingLineRegistration?, Run?>> {
+        return StagingRunsQuery(stagingFile = stagingFile(eventDay = eventDay))
+            .query()
+    }
+
 }
